@@ -11,5 +11,5 @@ def minOperations(n):
         while n % i == 0:
             res += i
             n = n / i
-    i += 1
+        i += 1
     return res
