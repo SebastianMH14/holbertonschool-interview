@@ -20,21 +20,14 @@ int is_palindrome(listint_t **head)
     {
         while (fast != NULL && fast->next != NULL)
         {
-            while (i == 0)
-            {
                 fast = fast->next->next;
                 low = low->next;
-                i++;
-                if (fast == low)
+                if (fast != low)
                 {
-                    return (0);
-                }
-                else {
                     return (1);
                 }
-                
-            }
+                i++;
         }
     }
-    return (1);
+    return (0);
 }
