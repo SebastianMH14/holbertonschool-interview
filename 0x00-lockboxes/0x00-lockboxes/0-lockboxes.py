@@ -3,6 +3,8 @@
 
 
 def canUnlockAll(boxes):
+    """boxes is a list of lists
+    A key with the same number as a box opens that box"""
     if not boxes:
         return False
 
