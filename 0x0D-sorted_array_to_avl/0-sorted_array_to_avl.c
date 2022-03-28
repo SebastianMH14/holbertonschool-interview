@@ -18,7 +18,7 @@ avl_t *sorted_array_to_avl(int *array, size_t size)
 
 /**
  * insert - a sorted array into a tree avl
- * @arr: the array to convert into the tree
+ * @array: the array to convert into the tree
  * @end: the size of the array
  * @start: the start of the array
  * @previos_node: the parent of the node
