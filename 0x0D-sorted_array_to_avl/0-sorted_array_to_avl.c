@@ -36,7 +36,7 @@ avl_t *insert(int *array, int start, int end, avl_t *previos_node)
 	}
 
 	mid = start + (end - start) / 2;
-	root = new_node(arr[mid], previos_node);
+	root = new_node(array[mid], previos_node);
 	if (root == NULL)
 		return (NULL);
 
