@@ -48,6 +48,8 @@ void heapify(int arr[], int n, int i)
  */
 void heap_sort(int *array, size_t size)
 {
+	if (size <= 1)
+		return;
 	for (int i = size / 2 - 1; i >= 0; i--)
 		heapify(array, size, i);
 

@@ -2,7 +2,6 @@
 #define _HOLBERTON_
 
 #include <stdlib.h>
-#include <stdio.h>
 
 
 void print_array(const int *array, size_t size);
