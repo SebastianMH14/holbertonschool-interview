@@ -1,62 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "sort.h"
 
 /**
- * swap - Swaps two elements of an array
- * @a: First element
- * @b: Second element
- * return: void
- */
-void swap(int *a, int *b)
-{
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-/**
- * heapify - Heapify the array
- * @arr: The array to be heapified
- * @n: The size of the array
- * @i: The index of the current node
+ * heap_sort - sorts an array of integers in ascending order using heap sort
+ *
+ * @array: array of integers to sort
+ * @size: size of array of integers
+ *
  * Return: void
  */
-void heapify(int arr[], int n, int i)
+
+void heap_sort(int *array, size_t size)
 {
-	int largest = i;
-	int left = 2 * i + 1;
-	int right = 2 * i + 2;
+	size_t last;
+	int store;
 
-	if (left < n && arr[left] > arr[largest])
-		largest = left;
-
-	if (right < n && arr[right] > arr[largest])
-		largest = right;
-
-	if (largest != i)
+	if (size <= 1)
+		return;
+	heapify(array, size);
+	last = size - 1;
+	while (last > 0)
 	{
-		swap(&arr[i], &arr[largest]);
-		heapify(arr, n, largest);
+		store = array[0];
+		array[0] = array[last];
+		array[last] = store;
+		print_array(array, size);
+		last -= 1;
+		sift_down(array, 0, last, size);
 	}
 }
 
 /**
- * heap_sort - Sorts an array of integers in ascending order using the heap
- * sort algorithm
+ * heapify - heaps an integer array
  *
- * @array: The array to be sorted
- * @size: Number of elements in @array
+ * @array: array to heapify
+ * @size: size of the array
+ *
+ * Return: void
  */
-void heap_sort(int *array, size_t size)
-{
-	if (size <= 1)
-		return;
-	for (int i = size / 2 - 1; i >= 0; i--)
-		heapify(array, size, i);
 
-	for (int i = size - 1; i >= 0; i--)
+void heapify(int *array, size_t size)
+{
+	size_t start;
+
+	if ((size - 1) % 2 == 0)
+		start = (size - 3) / 2;
+	else
+		start = (size - 2) / 2;
+	while (start + 1 >= 1)
 	{
-		swap(&array[0], &array[i]);
+		sift_down(array, start, size - 1, size);
+		start -= 1;
+	}
+}
+
+/**
+ * sift_down - sift down
+ *
+ * @array: heap array to sift
+ * @start: start
+ * @end: end
+ * @size: array size
+ *
+ * Return: void
+ */
+
+void sift_down(int *array, size_t start, size_t end, size_t size)
+{
+	size_t root = start, child, swap;
+	int temp;
+
+	while (root * 2 + 1 <= end)
+	{
+		child = root * 2 + 1;
+		swap = root;
+		if (array[swap] < array[child])
+			swap = child;
+		if (child + 1 <= end && array[swap] < array[child + 1])
+			swap = child + 1;
+		if (swap == root)
+			return;
+		temp = array[root];
+		array[root] = array[swap];
+		array[swap] = temp;
 		print_array(array, size);
-		heapify(array, i, 0);
+		root = swap;
 	}
 }
