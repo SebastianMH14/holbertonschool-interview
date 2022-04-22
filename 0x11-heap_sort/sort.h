@@ -9,4 +9,4 @@ void heap_sort(int *array, size_t size);
 void swap(int *a, int *b);
 void heapify(int arr[], int n, int i);
 
-#endif
+#endif /*SORT_H*/
