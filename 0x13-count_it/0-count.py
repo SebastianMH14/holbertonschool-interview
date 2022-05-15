@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 """
-recursive function that queries the Reddit API, 
-parses the title of all hot articles, and prints 
-a sorted count of given keywords
+Show number of occurrences of keywords in hot post titles (case-insensitive)
 """
 from collections import Counter, defaultdict
 import requests
+
+URL_TEMPLATE = 'https://www.reddit.com/r/{}/hot.json'
 
 
 def count_words(subreddit, wordlist, count=None, after=None):
@@ -13,11 +13,11 @@ def count_words(subreddit, wordlist, count=None, after=None):
     Query reddit for hot posts and print total occurrences of each keyword
     """
     response = requests.get(
-        f'https://www.reddit.com/r/{subreddit}/hot.json',
-        headers={'User-Agent': 'Mozilla/5.0'},
-        params={'after': after, 'limit': 100},
-        allow_redirects=False,
-    )
+            URL_TEMPLATE.format(subreddit),
+            headers={'User-Agent': 'Mozilla/5.0'},
+            params={'after': after, 'limit': 100},
+            allow_redirects=False,
+        )
     if response.status_code == 200:
         if count is None:
             count = defaultdict(int)
