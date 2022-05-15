@@ -1,47 +1,48 @@
 #!/usr/bin/python3
-"""Queries the Reddit API"""
-import re
+""" Contains the function count_words(subreddit, word_list)) """
 import requests
-import sys
 
 
-def count_words(subreddit, word_list, after="", to_print={}):
+def count_words(subreddit, word_list, hot_list_titles=[], after='null'):
+    """ returns a list containing the titles
+    of all hot articles for a given subreddit.
     """
-    Queries the Reddit API
-    """
+    base_url = 'https://www.reddit.com/r/'
+    url = base_url + subreddit + "/hot.json"
+    credentials = {'User-Agent': "linux:1:v1.0 (by /u/svelezg_r)"}
+    parameters = {"limit": "100", "after": after}
+    response = requests.get(url,
+                            headers=credentials,
+                            params=parameters,
+                            allow_redirects=False)
+    if response.status_code != 200:
+        return None
 
-    if after == "":
+    hot_list_of_dicts = response.json().get("data").get("children")
+    after = response.json().get("data").get("after")
+    """""to print the after string, which acts as a "pointer"
+    to the next response uncomment the following line"""
+    # print(after)
+    hot_list_titles.extend([reddit.get("data").get("title") for
+                            reddit in hot_list_of_dicts])
+    """to print the length of the hot_list_titles uncomment
+    the following line"""
+    # print(len(hot_list_titles))
+
+    if after is None:
+        to_print_dict = {x: 0 for x in word_list}
         for word in word_list:
-            to_print[word] = 0
+            count = 0
+            for title in hot_list_titles:
+                split_title = title.split()
+                new_split = [element.lower() for element in split_title]
+                count = count + new_split.count(word.lower())
+            if count != 0:
+                to_print_dict[word] = to_print_dict[word] + count
 
-    url = "https://www.reddit.com/r/{}/hot.json{}".format(subreddit, after)
-
-    json_obj = requests.get(url, headers={'User-Agent': 'My User Agent 1.0'})
-
-    if json_obj.status_code != 404:
-        dict_obj = json_obj.json()
-        list_obj = dict_obj.get('data').get('children')
-
-    for each in list_obj:
-        title = each.get('data').get('title')
-        tit_list = title.split()
-        for word in word_list:
-            c = re.compile(r"^{}$".format(word), re.I)
-            for each_tit_w in tit_list:
-                res = c.findall(each_tit_w)
-                to_print[word] += len(res)
-
-    next_fullname = dict_obj.get('data').get('after')
-    after = "?after={}".format(next_fullname)
-
-    if next_fullname is not None:
-        count_words(subreddit, word_list, after, to_print)
+        for elem in sorted(to_print_dict.items(), key=lambda x: (-x[1], x[0])):
+            if elem[1] != 0:
+                print("{}: {}".format(elem[0], elem[1]))
     else:
-        sorted_l = sorted(to_print.items(), key=lambda x: x[1])
-        sorted_l.reverse()
-
-        for x in sorted_l:
-            if x[1] != 0:
-                print("{}: {}".format(x[0], x[1]))
-
-    return None
+        return count_words(subreddit, word_list,
+                           hot_list_titles, after)
