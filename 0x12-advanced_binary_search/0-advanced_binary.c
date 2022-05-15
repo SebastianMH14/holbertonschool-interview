@@ -1,52 +1,43 @@
 #include "binary_search.h"
 
 /**
- * advanced_binary - binary search
- * @array: array to search
- * @size: size of array
- * @value: value to search for
+ * advanced_binary - search to search for first time
+ * @array: pointer to the first element
+ * array is sorted in ascending order
+ * @size: number of elements in array
+ * @value: the given value to search for
  *
- * Return: index of value, -1 if not found
+ * Return: the first index
  */
 int advanced_binary(int *array, size_t size, int value)
 {
+	int half = ((size - 1) / 2), result = 0;
+	size_t i = 0;
+
 	if (array == NULL || size < 1)
 		return (-1);
 
-	return (binary_search(array, 0, size - 1, value));
-}
-
-/**
- * binary_search- advancend binary search
- * @array:  array to search
- * @left:  left array
- * @right:  right array
- * @value: value to find
- *  Return:  int
- */
-int binary_search(int *array, int left, int right, int value)
-{
-	int mid = (left + right) / 2;
-	int i;
-
-	if (left > right)
-		return (-1);
-
 	printf("Searching in array: ");
-
-	for (i = left; i <= right; i++)
+	for (i = 0; i < size; i++)
 	{
-		if (i < right)
-			printf("%d, ", array[i]);
+		printf("%d", array[i]);
+		if (i != (size - 1))
+			printf(", ");
 		else
-			printf("%d\n", array[i]);
+			printf("\n");
 	}
 
-	if (array[left] == value)
-		return (left);
+	if (array[half] == value && half == 0)
+		return (half);
+	else if (size == 1)
+		return (-1);
 
-	if (array[mid] < value)
-		return (binary_search(array, mid + 1, right, value));
+	if (array[half] >= value)
+		return (advanced_binary(array, half + 1, value));
 
-	return (binary_search(array, left, mid, value));
+	half++;
+	result = advanced_binary(&array[half], size - half, value);
+	if (result == -1)
+		return (-1);
+	return (half + result);
 }
