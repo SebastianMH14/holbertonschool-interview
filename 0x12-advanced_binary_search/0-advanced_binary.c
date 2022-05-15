@@ -1,4 +1,4 @@
-#include "binary_search.h"
+#include "search_algos.h"
 
 /**
  * advanced_binary - search to search for first time
