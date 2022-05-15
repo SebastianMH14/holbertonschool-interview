@@ -7,12 +7,14 @@
 import requests
 
 
-def count_words(subreddit, word_list, after='', result={}):
+def count_words(subreddit, word_list, after=''):
     """ 
         prints a sorted count of given keywords
     """
     if subreddit is None or subreddit == "" or word_list is None:
         return None
+
+    result = {}
 
     r = requests.get(
         'https://www.reddit.com/r/{}.json'.format(subreddit),
